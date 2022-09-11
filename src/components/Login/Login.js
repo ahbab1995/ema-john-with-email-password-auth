@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Login.css";
 const Login = () => {
   return (
@@ -26,10 +27,15 @@ const Login = () => {
               required
             />
           </div>
-         
-            <input className="btn" type="submit" value="Login" />
-          
+
+          <input className="btn" type="submit" value="Login" />
         </form>
+        <p>
+          New to Ema-John?{" "}
+          <Link className="form-link" to="/signup">
+            Create an account
+          </Link>
+        </p>
       </div>
     </div>
   );
