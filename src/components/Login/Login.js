@@ -1,18 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
+import auth from "../../firebase.init";
 import "./Login.css";
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+
+  const handelEmailBlur = (e) => {
+    const emailInput = e.target.value;
+    setEmail(emailInput);
+  };
+
+  const handelPasswordBlur = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handelUserLogin = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(email, password);
+  };
+
+  if (user) {
+    navigate("/shop");
+  }
+
   return (
     <div className="form-container">
       <div className="main-area">
         <h2 className="form-title">Login</h2>
 
-        <form action="">
+        <form onSubmit={handelUserLogin}>
           <div className="input-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
               name="email"
+              onBlur={handelEmailBlur}
               placeholder="Enter Your Email"
               required
             />
@@ -23,10 +53,16 @@ const Login = () => {
             <input
               type="password"
               name="password"
+              onBlur={handelPasswordBlur}
               placeholder="Enter Your Password"
               required
             />
           </div>
+
+          <p style={{ color: "red" }}>{error?.message}</p>
+          {
+            loading && <p>Loading ...</p>
+          }
 
           <input className="btn" type="submit" value="Login" />
         </form>
